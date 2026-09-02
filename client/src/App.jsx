@@ -4,13 +4,19 @@ import './App.css'
 function App() {
 const [todos, setTodos] = useState([])
 const [title, setTitle] = useState('')
+const [version, setVersion] = useState('')
 
 async function loadTodos() {
 const res = await fetch('/api/todos')
 setTodos(await res.json())
 }
 
-useEffect(() => { loadTodos() }, [])
+useEffect(() => {
+loadTodos()
+fetch('/api/health')
+.then((res) => res.json())
+.then((data) => setVersion(data.version))
+}, [])
 
 async function addTodo(event) {
 event.preventDefault()
@@ -36,7 +42,7 @@ loadTodos()
 
 return (
 <div className="app">
-<h1>My To-Do List</h1>
+<h1>My To-Do List <span className="version">{version}</span></h1>
 <form onSubmit={addTodo}>
 <input
 value={title}
