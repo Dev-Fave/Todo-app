@@ -30,7 +30,7 @@ jobs:
       - name: Build and push
         id: meta
         run: |
-          IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE=${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[lower:]')
           TAG=${GITHUB_SHA::7}
           docker build --build-arg APP_VERSION=$TAG -t $IMAGE:$TAG -t $IMAGE:latest .
           docker push $IMAGE:$TAG
